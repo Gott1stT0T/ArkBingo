@@ -1,8 +1,8 @@
 <div align="center">
 
-<!-- ===== 动态炫彩打字机标题（只留标题本身） ===== -->
+<!-- ===== 动态变色标题 ===== -->
 <a href="https://gott1stt0t.github.io/ArkBingo.github.io/">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=900&size=52&duration=2600&pause=900&color=FFE600&center=true&vCenter=true&multiline=true&width=1000&height=130&lines=%EF%BD%9E%E5%8D%9A%E5%A3%AB%E7%9A%84%E8%82%89%E9%B8%BD+BINGO%EF%BD%9E" alt="～博士的肉鸽BINGO～" />
+  <img src="./assets/title.svg" alt="～博士的肉鸽BINGO～" width="700">
 </a>
 
 <br>
