@@ -6,7 +6,7 @@
         font-size: 52px;
         font-weight: 900;
         text-anchor: middle;
-        animation: colorCycle 4s linear infinite, blink 4s linear infinite;
+        animation: colorCycle 4s steps(8, end) infinite;
       }
       @keyframes colorCycle {
         0%    { fill: #00FFFF; }
@@ -18,11 +18,6 @@
         75%   { fill: #FF6B6B; }
         87.5% { fill: #FFA500; }
         100%  { fill: #00FFFF; }
-      }
-      @keyframes blink {
-        0%, 60%  { opacity: 1; }
-        70%, 90% { opacity: 0; }
-        100%     { opacity: 1; }
       }
     </style>
   </defs>
