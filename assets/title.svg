@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 130" width="700" height="130">
+  <defs>
+    <style>
+      .title {
+        font-family: 'Fira Code', 'PingFang SC', 'Microsoft YaHei', monospace;
+        font-size: 52px;
+        font-weight: 900;
+        text-anchor: middle;
+        animation: colorCycle 4s linear infinite, blink 4s linear infinite;
+      }
+      @keyframes colorCycle {
+        0%    { fill: #00FFFF; }
+        12.5% { fill: #00FF9D; }
+        25%   { fill: #AAFF00; }
+        37.5% { fill: #FFE600; }
+        50%   { fill: #FF44FF; }
+        62.5% { fill: #7B5CFF; }
+        75%   { fill: #FF6B6B; }
+        87.5% { fill: #FFA500; }
+        100%  { fill: #00FFFF; }
+      }
+      @keyframes blink {
+        0%, 60%  { opacity: 1; }
+        70%, 90% { opacity: 0; }
+        100%     { opacity: 1; }
+      }
+    </style>
+  </defs>
+  <text x="350" y="85" class="title">～博士的肉鸽BINGO～</text>
+</svg>
