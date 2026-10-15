@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- ===== 动态变色标题 ===== -->
-<a href="https://gott1stt0t.github.io/ArkBingo.github.io/">
+<a href="https://gott1stt0t.github.io/ArkBingo/">
   <img src="./assets/title.svg" alt="～博士的肉鸽BINGO～" width="700">
 </a>
 
