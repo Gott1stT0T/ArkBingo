@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-mode="sarkaz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0714">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="～博士的肉鸽BINGO～ 一款基于《明日方舟》集成战略玩法的同人 BINGO 小游戏合集，包含萨卡兹肉鸽、界园肉鸽、黑流树海三种模式。">
+  <meta name="author" content="Dr. 嘲月, Gott1stT0T, 御坂16382">
+  <title>～博士的肉鸽BINGO～</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-mode="sarkaz">
+
+  <!-- ======================================================================
+       环境背景：每个模式一张主视觉 + 专属动效层，切换时交叉淡入
+       ====================================================================== -->
+  <div class="ambient" aria-hidden="true">
+
+    <!-- 萨卡兹 · 紫 -->
+    <div class="ambient__layer" data-bg="sarkaz">
+      <span class="bg-photo bg-photo--sarkaz"></span>
+      <span class="bg-scrim"></span>
+      <span class="bg-sarkaz__ring bg-sarkaz__ring--1"></span>
+      <span class="bg-sarkaz__ring bg-sarkaz__ring--2"></span>
+      <span class="bg-sarkaz__ring bg-sarkaz__ring--3"></span>
+    </div>
+
+    <!-- 界园 · 夜 -->
+    <div class="ambient__layer" data-bg="garden">
+      <span class="bg-photo bg-photo--garden"></span>
+      <span class="bg-scrim"></span>
+      <span class="bg-garden__mist bg-garden__mist--a"></span>
+      <span class="bg-garden__mist bg-garden__mist--b"></span>
+      <span class="bg-garden__lattice"></span>
+      <div class="aurora">
+        <span class="aurora__ribbon aurora__ribbon--1"></span>
+        <span class="aurora__ribbon aurora__ribbon--2"></span>
+        <span class="aurora__ribbon aurora__ribbon--3"></span>
+        <span class="aurora__glow"></span>
+      </div>
+    </div>
+
+    <!-- 黑流树海 · 深潮 -->
+    <div class="ambient__layer" data-bg="blackflow">
+      <span class="bg-photo bg-photo--blackflow"></span>
+      <span class="bg-scrim"></span>
+      <span class="bg-blackflow__ripple bg-blackflow__ripple--1"></span>
+      <span class="bg-blackflow__ripple bg-blackflow__ripple--2"></span>
+      <span class="bg-blackflow__ripple bg-blackflow__ripple--3"></span>
+    </div>
+
+    <canvas class="ambient__canvas" id="dust"></canvas>
+    <div class="ambient__vignette"></div>
+    <div class="ambient__grain"></div>
+  </div>
+
+  <div class="mode-art__side" aria-hidden="true" id="sideCaption">萨卡兹的无终奇语</div>
+
+  <!-- 模式切换动画遮罩 -->
+  <div class="veil" id="veil" aria-hidden="true">
+    <div class="veil__stage">
+      <span class="veil__band"></span>
+      <span class="veil__flash"></span>
+      <span class="veil__shard veil__shard--1"></span>
+      <span class="veil__shard veil__shard--2"></span>
+      <span class="veil__shard veil__shard--3"></span>
+      <span class="veil__shard veil__shard--4"></span>
+      <span class="veil__wash"></span>
+      <span class="veil__seal"></span>
+      <span class="veil__petal veil__petal--1"></span>
+      <span class="veil__petal veil__petal--2"></span>
+      <span class="veil__petal veil__petal--3"></span>
+      <span class="veil__petal veil__petal--4"></span>
+      <span class="veil__petal veil__petal--5"></span>
+      <span class="veil__petal veil__petal--6"></span>
+      <span class="veil__water"></span>
+      <span class="veil__scan"></span>
+      <span class="veil__ripple veil__ripple--1"></span>
+      <span class="veil__ripple veil__ripple--2"></span>
+      <span class="veil__ripple veil__ripple--3"></span>
+      <span class="veil__label">
+        <span class="veil__label-cn" id="veilLabelCn">萨卡兹肉鸽</span>
+        <small id="veilLabelEn">Furnace Side Fables</small>
+      </span>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       主界面
+       ====================================================================== -->
+  <div class="app" id="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand__mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2.4 20.3 7v10L12 21.6 3.7 17V7z"></path>
+            <g fill="currentColor" stroke="none">
+              <circle cx="8.6" cy="8.6" r="1.05"></circle>
+              <circle cx="12" cy="8.6" r="1.05"></circle>
+              <circle cx="15.4" cy="8.6" r="1.05"></circle>
+              <circle cx="8.6" cy="12" r="1.05"></circle>
+              <circle class="brand__dot" cx="12" cy="12" r="1.25"></circle>
+              <circle cx="15.4" cy="12" r="1.05"></circle>
+              <circle cx="8.6" cy="15.4" r="1.05"></circle>
+              <circle cx="12" cy="15.4" r="1.05"></circle>
+              <circle cx="15.4" cy="15.4" r="1.05"></circle>
+            </g>
+          </svg>
+        </span>
+        <div class="brand__text">
+          <h1 class="brand__title">～博士的肉鸽BINGO～</h1>
+          <p class="brand__sub">ArkBingo · Integrated Strategies</p>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <button class="icon-btn" id="helpBtn" type="button" aria-label="查看玩法与快捷键" title="玩法与快捷键">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9.2"></circle>
+            <path d="M9.4 9.3a2.7 2.7 0 0 1 5.2.9c0 1.7-2.6 2.1-2.6 3.7"></path>
+            <circle cx="12" cy="17.1" r="0.9" fill="currentColor" stroke="none"></circle>
+          </svg>
+          <span class="icon-btn__label">玩法</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="stage">
+
+      <!-- 模式切换 -->
+      <nav class="modes" id="modes" role="tablist" aria-label="集成战略模式">
+        <span class="modes__slider" aria-hidden="true"></span>
+
+        <button class="modes__tab is-active" data-mode="sarkaz" role="tab" aria-selected="true" type="button">
+          <span class="modes__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 2.6c3.3 4.3 5.5 7 5.5 10.2a5.5 5.5 0 0 1-11 0c0-1.9.8-3.4 2-5 .5 1.4 1.3 2.1 2.2 2.1 1.1 0 1.9-1 1.9-2.3 0-1.7-.9-3.2-1.6-5Z"></path>
+            </svg>
+          </span>
+          <span class="modes__text">
+            <span class="modes__name">萨卡兹肉鸽</span>
+            <span class="modes__en">Furnace Side Fables</span>
+          </span>
+        </button>
+
+        <button class="modes__tab" data-mode="garden" role="tab" aria-selected="false" type="button">
+          <span class="modes__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+              <path d="M12 2.8v18.4M2.8 12h18.4"></path>
+              <circle cx="12" cy="12" r="4.4"></circle>
+              <circle cx="12" cy="12" r="8.6" stroke-dasharray="2 3.4"></circle>
+            </svg>
+          </span>
+          <span class="modes__text">
+            <span class="modes__name">界园肉鸽</span>
+            <span class="modes__en">Garden of Grotesqueries</span>
+          </span>
+        </button>
+
+        <button class="modes__tab" data-mode="blackflow" role="tab" aria-selected="false" type="button">
+          <span class="modes__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21V9.5"></path>
+              <path d="M12 13 8.4 9.4V5.6M12 13l3.6-3.6V5.6M12 11V3.4"></path>
+              <path d="M4.6 21c1.9-1.1 3.7-1.1 5.6 0 1.9 1.1 3.7 1.1 5.6 0 1.9-1.1 3.7-1.1 5.6 0" opacity="0.6"></path>
+            </svg>
+          </span>
+          <span class="modes__text">
+            <span class="modes__name">黑流树海</span>
+            <span class="modes__en">Blackflow of Drowning Seekers</span>
+          </span>
+        </button>
+      </nav>
+
+      <!-- 棋盘 -->
+      <section class="board" id="board" aria-labelledby="boardTitle">
+        <span class="board__frame" aria-hidden="true"></span>
+        <span class="board__corner board__corner--tl" aria-hidden="true"></span>
+        <span class="board__corner board__corner--tr" aria-hidden="true"></span>
+        <span class="board__corner board__corner--bl" aria-hidden="true"></span>
+        <span class="board__corner board__corner--br" aria-hidden="true"></span>
+
+        <header class="board__head">
+          <p class="board__kicker">
+            <span class="board__kicker-num" id="kickerNum">MODE 01</span>
+            <span id="kickerEn">Furnace Side Fables</span>
+          </p>
+          <div class="board__titlerow">
+            <h2 class="board__title" id="boardTitle">萨卡兹肉鸽</h2>
+            <span class="board__event" id="boardEvent">萨卡兹的无终奇语</span>
+            <span class="board__lock">
+              <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+              </svg>
+              已锁定
+            </span>
+          </div>
+        </header>
+
+        <div class="bingo-grid" id="grid" role="group" aria-label="BINGO 词条棋盘"></div>
+
+        <div class="board__stamp" aria-hidden="true">
+          <svg class="board__stamp-svg" data-stamp="sarkaz" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="60" cy="60" r="56"></circle>
+            <circle cx="60" cy="60" r="44" stroke-dasharray="2 5"></circle>
+            <path d="M60 22 98 60 60 98 22 60Z"></path>
+            <circle cx="60" cy="60" r="16"></circle>
+            <path d="M60 8v10M60 102v10M8 60h10M102 60h10"></path>
+          </svg>
+          <svg class="board__stamp-svg" data-stamp="garden" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="60" cy="60" r="56" stroke-dasharray="3 6"></circle>
+            <rect x="22" y="22" width="76" height="76" rx="4"></rect>
+            <path d="M22 60h76M60 22v76"></path>
+            <circle cx="60" cy="60" r="22"></circle>
+          </svg>
+          <svg class="board__stamp-svg" data-stamp="blackflow" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="60" cy="60" r="56"></circle>
+            <circle cx="60" cy="60" r="40" stroke-dasharray="1 6"></circle>
+            <path d="M60 96V44M60 62 44 46V32M60 58l16-16V28M60 50V26"></path>
+            <path d="M24 96c8-4 16-4 24 0s16 4 24 0 16-4 24 0" opacity="0.7"></path>
+          </svg>
+        </div>
+      </section>
+
+      <!-- 控制台 -->
+      <aside class="panel" aria-label="游戏控制台">
+        <div class="panel__actions">
+          <button class="btn btn--primary" id="shakeBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1"></path>
+              <path d="M20.5 3.5V9H15"></path>
+            </svg>
+            <span>ReRoll</span>
+          </button>
+
+          <button class="btn btn--ghost" id="lockBtn" type="button" aria-pressed="false">
+            <svg class="icon-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            <svg class="icon-unlock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="10" width="16" height="10" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 7.5-2"></path>
+            </svg>
+            <span id="lockLabel">页面锁定</span>
+          </button>
+        </div>
+
+        <div class="panel__block">
+          <p class="panel__label">本局进度</p>
+          <ul class="board__chips">
+            <li class="chip">词条 <b id="chipTotal">100</b></li>
+            <li class="chip">已标记 <b id="chipMarked">0/25</b></li>
+            <li class="chip chip--bingo" id="chipBingoWrap">BINGO <b id="chipBingo">0</b></li>
+            <li class="chip">刷新 <b id="chipRoll">×0</b></li>
+          </ul>
+        </div>
+
+        <div class="panel__block panel__rules">
+          <p class="panel__label">玩法</p>
+          <p>规则：默认N9开局，可ReRoll3次，重开2次</p>
+          <p><em>～请博士们尽量达成更多BINGO～</em></p>
+        </div>
+      </aside>
+
+    </main>
+
+    <footer class="footer">
+      <p><strong>词条库</strong>：萨卡兹肉鸽 <b id="footSarkaz">100</b> · 界园肉鸽 <b id="footGarden">126</b> · 黑流树海 <b id="footDivine">107</b> | tips: 点击格子可标记完成状态</p>
+      <p>更新日志：新增锁定页面防止误刷新，支持快捷刷 Space/Enter 刷新</p>
+      <p class="footer__warn">⚠️注意⚠️最新黑流树海为框架预载，所属内容均为AI编撰，请勿相信</p>
+      <p class="footer__keys">
+        <kbd>Space</kbd><kbd>Enter</kbd> 刷新 ·
+        <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd> 切换模式 ·
+        <kbd>L</kbd> 锁定
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- 词条详情 -->
+  <div class="sheet" id="sheet" aria-hidden="true">
+    <button class="sheet__scrim" id="sheetScrim" type="button" aria-label="关闭词条详情"></button>
+    <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+      <div class="sheet__grip" aria-hidden="true"></div>
+      <p class="sheet__kicker"><span id="sheetKicker">萨卡兹肉鸽 · MODE 01</span></p>
+      <h2 class="sheet__title" id="sheetTitle"></h2>
+      <p class="sheet__desc" id="sheetDesc"></p>
+      <div class="sheet__actions">
+        <button class="btn btn--primary" id="sheetToggle" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m4.5 12.5 5 5 10-11"></path>
+          </svg>
+          <span id="sheetToggleLabel">标记完成</span>
+        </button>
+        <button class="btn btn--ghost" id="sheetClose" type="button">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 玩法说明 -->
+  <div class="sheet" id="helpSheet" aria-hidden="true">
+    <button class="sheet__scrim" id="helpScrim" type="button" aria-label="关闭玩法说明"></button>
+    <div class="sheet__panel sheet__panel--help" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+      <div class="sheet__grip" aria-hidden="true"></div>
+      <p class="sheet__kicker"><span>HOW TO PLAY</span></p>
+      <h2 class="sheet__title" id="helpTitle">玩法与快捷键</h2>
+
+      <ol class="help__list">
+        <li>选择一个集成战略：<b>萨卡兹 / 界园 / 黑流树海</b>。</li>
+        <li>随机抽取 <b>25 个不重复词条</b>，生成 5×5 BINGO 网格。</li>
+        <li>点击格子标记「已完成」，再点一次取消。</li>
+        <li>横、竖、斜任意一条线连成，即算 <b>BINGO</b>，连线会亮起。</li>
+        <li>点格子右下角的 <b>⤢</b> 可以看完整词条。</li>
+        <li>进度自动保存在本地，关掉页面再回来还在。</li>
+      </ol>
+
+      <dl class="help__keys">
+        <div><dt><kbd>Space</kbd> / <kbd>Enter</kbd></dt><dd>刷新 BINGO</dd></div>
+        <div><dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>切换模式</dd></div>
+        <div><dt><kbd>L</kbd></dt><dd>页面锁定</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>关闭弹窗</dd></div>
+      </dl>
+
+      <p class="help__note">⚠️ 黑流树海为框架预载，词条均为 AI 编撰，请勿相信。本作品为非官方同人，与鹰角网络无关。</p>
+
+      <div class="sheet__actions">
+        <button class="btn btn--primary" id="helpClose" type="button">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast__icon" aria-hidden="true">✦</span>
+    <span id="toastText"></span>
+  </div>
+
+  <noscript>
+    <div style="position:fixed;inset:0;display:grid;place-items:center;background:#111;color:#eee;font:16px/1.6 sans-serif;padding:24px;text-align:center;z-index:999">
+      <p>～博士的肉鸽BINGO～ 需要启用 JavaScript 才能摇出词条，请在浏览器设置中开启后刷新页面。</p>
+    </div>
+  </noscript>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

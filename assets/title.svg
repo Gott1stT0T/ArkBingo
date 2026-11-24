@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 130" width="700" height="130">
+  <defs>
+    <linearGradient id="arkTitleGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#00FFFF">
+        <animate attributeName="stop-color" values="#00FFFF;#00FF9D;#AAFF00;#FFE600;#FF44FF;#7B5CFF;#FF6B6B;#FFA500;#00FFFF" dur="8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" stop-color="#FFE600">
+        <animate attributeName="stop-color" values="#FFE600;#FF44FF;#7B5CFF;#FF6B6B;#FFA500;#00FFFF;#00FF9D;#AAFF00;#FFE600" dur="8s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" stop-color="#FF6B6B">
+        <animate attributeName="stop-color" values="#FF6B6B;#FFA500;#00FFFF;#00FF9D;#AAFF00;#FFE600;#FF44FF;#7B5CFF;#FF6B6B" dur="8s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+  </defs>
+  <text
+    x="350"
+    y="86"
+    text-anchor="middle"
+    font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif"
+    font-size="52"
+    font-weight="900"
+    fill="url(#arkTitleGradient)"
+    letter-spacing="1"
+  >～博士的肉鸽BINGO～</text>
+</svg>
